@@ -1,415 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Website with Contact Form</title>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Website</title>
   <style>
-    /* === RESET STYLES === */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: skyblue;
-    }
-
-    /* === HEADER === */
+    /* Header Layout */
     header {
-      background: blue;
-      color: white;
-      padding: 15px 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 15px 30px;
+      background: #333;
+      color: #fff;
       position: relative;
     }
 
+    /* Logo */
     .logo {
       font-size: 1.5rem;
       font-weight: bold;
     }
 
-    nav ul {
-      list-style: none;
+    /* Navigation */
+    .nav-links {
       display: flex;
       gap: 20px;
     }
 
-    nav ul li {
-      position: relative;
-    }
-
-    nav ul li a {
-      text-decoration: none;
-      color: white;
-      font-size: 1rem;
-      transition: color 0.3s;
-      cursor: pointer;
-    }
-
-    nav ul li a:hover {
-      color: #facc15;
-    }
-
-    .cta-btn {
-      background: #facc15;
-      color: black;
-      padding: 8px 16px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: background 0.3s;
-    }
-
-    .cta-btn:hover {
-      background: pink;
-    }
-
-    /* === SERVICES DROPDOWN (Now pink background) === */
-    .services-menu {
-      position: relative;
-    }
-
-    .services-menu .dropdown {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background-color: pink; /* ← Changed to pink */
-      padding: 10px 0;
-      border-radius: 6px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      min-width: 200px;
-      z-index: 1001;
-    }
-
-    .services-menu.open .dropdown {
-      display: block;
-    }
-
-    .services-menu .dropdown li a {
-      color: black;
-      padding: 10px 20px;
-      display: block;
+    .nav-links a {
+      color: #fff;
       text-decoration: none;
     }
 
-    .services-menu .dropdown li a:hover {
-      background-color: #ffe4ec;
+    /* Button */
+    .btn {
+      background: #ff6600;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
     }
 
-    /* === MOBILE STYLES === */
+    /* Hamburger Icon */
     .menu-toggle {
       display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      position: absolute;
+      left: 15px;
+      top: 15px;
     }
 
+    /* Mobile Styles */
     @media (max-width: 768px) {
-      .menu-toggle {
-        display: block;
-        font-size: 1.5rem;
-        cursor: pointer;
-      }
-
-      nav ul {
-        display: none;
+      .nav-links {
+        display: none; /* hide menu by default */
         flex-direction: column;
-        background: pink;
+        background: #444;
         position: absolute;
         top: 60px;
-        right: 5%;
+        left: 0;
+        width: 100%;
         padding: 10px;
-        border-radius: 6px;
       }
 
-      nav.active ul {
-        display: flex;
+      .nav-links.active {
+        display: flex; /* show when active */
       }
 
-      .services-menu .dropdown {
-        position: static;
-        background: pink;
-        box-shadow: none;
-        padding-left: 15px;
+      .btn {
+        display: none; /* hide button on mobile if needed */
       }
 
-      .services-menu.open .dropdown {
-        display: flex;
-        flex-direction: column;
+      .menu-toggle {
+        display: block; /* show ☰ on mobile */
       }
 
-      .services-menu .dropdown li a {
-        padding-left: 20px;
+      .logo {
+        margin-left: 50px; /* push logo right so it doesn’t overlap ☰ */
       }
     }
-
-    /* === MODAL STYLING === */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: #f9f9f9;
-      padding: 30px;
-      width: 90%;
-      max-width: 500px;
-      border-radius: 10px;
-      position: relative;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      animation: fadeIn 0.3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        transform: scale(0.9);
-        opacity: 0;
-      }
-
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #333;
-      cursor: pointer;
-    }
-
-    .close-btn:hover {
-      color: red;
-    }
-
-    /* === CONTACT FORM === */
-    .contact-form h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .contact-form label {
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .contact-form input,
-    .contact-form textarea {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-    }
-
-    .contact-form input[type="submit"] {
-      background-color: #4caf50;
-      color: #fff;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .contact-form input[type="submit"]:hover {
-      background-color: #3e8e41;
-    }
-
-    .name-field {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .name-field input {
-      width: 48%;
-    }
-
-    #form-message {
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-      display: none;
-    }
-  iframe {
-    width: 100%;
-    height: 100vh;  /* full screen height */
-    border: none;
-    display: block; /* remove inline gap */
-  }
-   footer {
-   position:bottom;
-  bottom:0;
-  left:0;
-  width:100%;
-  }
   </style>
 </head>
-
 <body>
-
-  <!-- === HEADER === -->
   <header>
+    <!-- Hamburger Menu -->
+    <div class="menu-toggle">☰</div>
+
+    <!-- Logo -->
     <div class="logo">MyWebsite</div>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
-    <!-- === NAVIGATION === -->
-    <nav id="navbar">
-      <ul>
-        <li><a href="home.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-
-        <!-- === SERVICES MENU (Click to open) === -->
-        <li class="services-menu">
-          <a href="#" onclick="toggleDropdown(event)">Services ▾</a>
-          <ul class="dropdown">
-            <li><a href="#">Website Development</a></li>
-            <li><a href="#">Video Editing</a></li>
-            <li><a href="#">SEO</a></li>
-          </ul>
-        </li>
-
-        <li><a href="#" onclick="openModal()">Contact</a></li>
-      </ul>
+    <!-- Navigation Links -->
+    <nav class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">About</a>
+      <a href="#">Services</a>
+      <a href="#">Contact</a>
     </nav>
 
-    <!-- === CTA BUTTON === -->
-    <a href="#" class="cta-btn">Get Started</a>
+    <!-- Get Started Button -->
+    <a href="#" class="btn">Get Started</a>
   </header>
 
-  <!-- === CONTACT MODAL === -->
-  <div id="contactModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">×</span>
-      <div class="contact-form">
-        <h2>Contact Us</h2>
-        <form id="my-form" action="https://formspree.io/f/xkgvekno" method="POST">
-          <label>Name:</label>
-          <div class="name-field">
-            <input type="text" name="first-name" placeholder="First Name" required />
-            <input type="text" name="last-name" placeholder="Last Name" required />
-          </div>
-
-          <label>Email:</label>
-          <input type="email" name="email" required />
-
-          <label>Contact No:</label>
-          <input type="text" name="contact-no" required />
-
-          <label>Message:</label>
-          <textarea name="message" required></textarea>
-
-          <input type="submit" value="Send Message" />
-        </form>
-        <p id="form-message"></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- === JAVASCRIPT === -->
   <script>
     // Toggle mobile menu
-    function toggleMenu() {
-      document.getElementById("navbar").classList.toggle("active");
-    }
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
 
-    // Open contact modal
-    function openModal() {
-      document.getElementById("contactModal").style.display = "flex";
-    }
-
-    // Close contact modal
-    function closeModal() {
-      document.getElementById("contactModal").style.display = "none";
-    }
-
-    // Close modal when clicking outside
-    window.onclick = function (event) {
-      const modal = document.getElementById("contactModal");
-      if (event.target === modal) {
-        closeModal();
-      }
-    };
-
-    // Toggle Services dropdown on click
-    function toggleDropdown(event) {
-      event.preventDefault();
-      const parentLi = event.target.closest(".services-menu");
-
-      // Close other open dropdowns
-      document.querySelectorAll(".services-menu").forEach(menu => {
-        if (menu !== parentLi) {
-          menu.classList.remove("open");
-        }
-      });
-
-      // Toggle current dropdown
-      parentLi.classList.toggle("open");
-    }
-
-    // Close dropdown if clicked outside
-    window.addEventListener("click", function (event) {
-      const isClickInside = event.target.closest(".services-menu");
-      if (!isClickInside) {
-        document.querySelectorAll(".services-menu").forEach(menu => {
-          menu.classList.remove("open");
-        });
-      }
-    });
-
-    // Form submission using fetch
-    const form = document.getElementById("my-form");
-    const formMessage = document.getElementById("form-message");
-
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      const data = new FormData(form);
-
-      try {
-        const response = await fetch(form.action, {
-          method: form.method,
-          body: data,
-          headers: { Accept: "application/json" },
-        });
-
-        if (response.ok) {
-          formMessage.style.display = "block";
-          formMessage.style.color = "green";
-          formMessage.textContent = "✅ Thanks! Your message has been sent.";
-          form.reset();
-        } else {
-          throw new Error("Server error");
-        }
-      } catch (error) {
-        formMessage.style.display = "block";
-        formMessage.style.color = "red";
-        formMessage.textContent = "❌ Oops! Something went wrong.";
-      }
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
     });
   </script>
 </body>
-
 </html>
-<iframe src="home.html"frameborder="0"width="100%"heigth="auto"></iframe>
-<iframe src="iubpage.html"frameborder="0"width="100%"heigth="auto"></iframe>
-<iframe src="footer2.html" 
-        style="position:relative; bottom:0; left:0; width:100%; height:400px; border:none; z-index:999;">
-</iframe>
-
-
